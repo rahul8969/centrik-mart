@@ -1,0 +1,158 @@
+<div class="page">
+<!-- NavBar starts here -->
+    <nav class="row navbar navbar-dark sticky-top bg-dark">
+        <div class="col-md-3">
+            <a class="navbar-brand" href="#">
+                <img src="../../assets/centrik-logo.png" width="90" height="30" class="d-inline-block align-top" alt="">
+                Mart
+            </a>
+        </div>
+        <div class="col-md-6">
+            <div class="menu">
+                <button class="btn btn-outline-success my-2 my-sm-0" [class.active]="showProductList" (click)="backToHome()"><i class="fa fa-home"></i>Home</button>
+                <button class="btn btn-outline-success my-2 my-sm-0"><i class="fa fa-address-card"></i>About</button>
+                <button class="btn btn-outline-success my-2 my-sm-0"><i class="fa fa-user-circle"></i>Contact</button>
+                <button class="btn btn-outline-success my-2 my-sm-0" [class.active]="!showProductList" style="margin-right: 10px;" (click)="goToCart()"><i class="fas fa-shopping-cart"></i>Cart</button>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <form class="form-inline" style="float: right;">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><i class="fa fa-search"></i>Search</button>
+            </form>
+        </div>
+    </nav>
+    <!-- NavBar ends here -->
+    <!-- home content Starts here -->
+    <div class="body_sec">
+        <div class="row">
+            <div class="col-md-2 p-0">
+                <div class="filtermenu">
+                    <div class="card">
+                        <div class="card-header">
+                            Filter By
+                        </div>
+                        <div class="card-body">
+                            <div class="filter_option_div">
+                                <label class="filer_sec_label">Categories</label>
+                                <div class="categoryies">
+                                    <ul class="list-group list-group-flush">
+                                        <li *ngFor="let items of categoryList" [class.active]="items==selectedCategory" class="list-group-item" (click)="filterByCategory(items)" style="cursor: pointer;">{{items}}</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="filter_option_div">
+                                <label class="filer_sec_label">Brands</label>
+                                <div class="categoryies">
+                                    <ul class="list-group list-group-flush">
+                                        <li *ngFor="let items of brandList" [class.active]="items==selectedCategory" class="list-group-item" (click)="filterByBrands(items)" style="cursor: pointer;">{{items}}</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card mt-2">
+                        <div class="card-header">
+                            Sort By
+                        </div>
+                        <div class="card-body">
+                            <div class="filter_option_div">
+                                <label class="filer_sec_label">Price</label>
+                                <div class="categoryies">
+                                    <ul class="list-group list-group-flush">
+                                        <li *ngFor="let price of prices" [class.active]="price==priceRange" class="list-group-item" (click)="filterByPrice(price.price)" style="cursor: pointer;">{{price.price}}</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="filter_option_div">
+                                <label class="filer_sec_label">Ratings</label>
+                                <div class="categoryies">
+                                    <ul class="list-group list-group-flush">
+                                        <li *ngFor="let rating of ratings" [class.active]="rating==ratingRange" class="list-group-item" (click)="filterByRatings(rating.rating)" style="cursor: pointer;">{{rating.rating}}</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="filter_option_div">
+                                <label class="filer_sec_label">Discounts</label>
+                                <div class="categoryies">
+                                    <ul class="list-group list-group-flush">
+                                        <li *ngFor="let discount of discounts" [class.active]="discount==discountRange" class="list-group-item" (click)="filterByDiscounts(discount.discount)" style="cursor: pointer;">{{discount.discount}}</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-10 p-0" *ngIf="showProductList">
+                <div class="product_sec">
+                    <div *ngFor="let catitems of productByCategory">
+                        <div class="card" style="margin-bottom:5px;">
+                            <div class="card-header" style="text-transform: uppercase;text-align: center;">{{catitems.type}}</div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-3 mb-3" *ngFor="let products of catitems.data">
+                                        <div class="card product_card">
+                                            <img [src]="products.thumbnail" class="card-img-top productImg" alt="...">
+                                            <div class="card-body">
+                                                <Span class="product-name">{{products.title}}</Span>
+                                                <span class="rating">Rating :-{{products.rating}}/5</span><br>
+                                                <span class="discount">{{products.discountPercentage}}%</span>&nbsp;
+                                                <span class="price">${{products.price}}</span><br>
+                                                <span class="description">{{products.description}}</span>
+                                            </div>
+                                            <ul class="list-group list-group-flush">
+                                                <li class="list-group-item" style="text-align: center;">
+                                                    <button class="btn btn-sm btn-primary" style="margin-right: 5px;" (click)="addToCart(products)">Add to cart</button>
+                                                    <button class="btn btn-sm btn-success" (click)="goToCart(products)">buy now</button>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-10 p-0" *ngIf="!showProductList">
+                <div class="product_sec">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="row">
+                                <h4 class="col-md-6">Your Cart</h4>
+                                <div style="text-align: end;" class="col-md-6"><button class="btn btn-sm btn-danger" (click)="backToHome()">back</button></div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <ul *ngFor="let items of cartList">
+                                <li>
+                                    <div class="row">
+                                        <div class="col-md-2"><img [src]="items.thumbnail" alt="" class="cartProductImg"></div>
+                                        <div class="col-md-5">
+                                            <Span class="product-name">{{items.title}}</Span>
+                                            <span class="rating">Rating :-{{items.rating}}/5</span><br>
+                                            <span class="description">{{items.description}}</span>
+                                        </div>
+                                        <div class="col-md-5" style="text-align: end;">
+                                            <span class="price">Rs.{{items.price}}</span><br>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                            <span *ngIf="cartList.length==0" class="noItems">No Items Added</span>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <div style="text-align: end;"><span>Total {{total}}</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- home contents ends here -->
+</div>
