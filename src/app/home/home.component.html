@@ -77,7 +77,7 @@
                                 <label class="filer_sec_label">Discounts</label>
                                 <div class="categoryies">
                                     <ul class="list-group list-group-flush">
-                                        <li *ngFor="let discount of discounts" [class.active]="discount==discountRange" class="list-group-item" (click)="filterByDiscounts(discount.discount)" style="cursor: pointer;">{{discount.discount}}</li>
+                                        <li *ngFor="let discount of discounts" [class.active]="discount==discountRange" class="list-group-item" (click)="filterByDiscounts(discount.discount)" style="cursor: pointer;">{{discount.discount}}%</li>
                                     </ul>
                                 </div>
                             </div>
@@ -96,6 +96,7 @@
                                         <div class="card product_card">
                                             <img [src]="products.thumbnail" class="card-img-top productImg" alt="...">
                                             <div class="card-body">
+                                                <span class="stocks" *ngIf="products.stock<50">hurry! only a few items left</span><br>
                                                 <Span class="product-name">{{products.title}}</Span>
                                                 <span class="rating">Rating :-{{products.rating}}/5</span><br>
                                                 <span class="discount">{{products.discountPercentage}}%</span>&nbsp;
@@ -105,7 +106,7 @@
                                             <ul class="list-group list-group-flush">
                                                 <li class="list-group-item" style="text-align: center;">
                                                     <button class="btn btn-sm btn-primary" style="margin-right: 5px;" (click)="addToCart(products)">Add to cart</button>
-                                                    <button class="btn btn-sm btn-success" (click)="goToCart(products)">buy now</button>
+                                                    <button class="btn btn-sm btn-success" (click)="buyProduct(products)">buy now</button>
                                                 </li>
                                             </ul>
                                         </div>
@@ -126,17 +127,31 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <ul *ngFor="let items of cartList">
+                            <ul *ngFor="let items of cartList;let i=index">
                                 <li>
                                     <div class="row">
-                                        <div class="col-md-2"><img [src]="items.thumbnail" alt="" class="cartProductImg"></div>
-                                        <div class="col-md-5">
-                                            <Span class="product-name">{{items.title}}</Span>
-                                            <span class="rating">Rating :-{{items.rating}}/5</span><br>
-                                            <span class="description">{{items.description}}</span>
+                                        <div class="col-md-2"><img [src]="items.product.thumbnail" alt="" class="cartProductImg"></div>
+                                        <div class="col-md-4">
+                                            <Span class="product-name">{{items.product.title}}</Span>
+                                            <span class="rating">Rating :-{{items.product.rating}}/5</span><br>
+                                            <span class="description">{{items.product.description}}</span>
                                         </div>
-                                        <div class="col-md-5" style="text-align: end;">
+                                        <div class="col-md-2" style="text-align: -webkit-right;">
+                                            <div class="input-group mb-3 quantity">
+                                                <div class="input-group-prepend">
+                                                  <span><i class="fa fa-minus-circle" aria-hidden="true" (click)="getQuantity('substract',items)"></i></span>&nbsp;
+                                                </div>
+                                                <span>&nbsp;{{items.quantity}}&nbsp;</span>&nbsp;
+                                                <div class="input-group-append">
+                                                  <span><i class="fa fa-plus-circle" aria-hidden="true" (click)="getQuantity('add',items)"></i></span>
+                                                </div>
+                                              </div>
+                                        </div>
+                                        <div class="col-md-2" style="text-align: end;">
                                             <span class="price">Rs.{{items.price}}</span><br>
+                                        </div>
+                                        <div class="col-md-2" style="text-align: end;">
+                                            <button class="btn btn-sm btn-danger" (click)="removeFromCart(items)">remove</button>
                                         </div>
                                     </div>
                                 </li>
